@@ -61,6 +61,14 @@ class PhoneNumber:
     def __repr__(self):
         return f"PhoneNumber(area_code={self.area_code}, number={self.number}, connected={self.connected})"
 
+"""
+    Preconditions: 
+    - `switchboards` is a dictionary containing Switchboard objects.
+    - `area_1` and `area_2` are valid area codes corresponding to existing switchboards in the dictionary.
+
+    Postconditions:
+    - Connects the switchboards with area codes area_1 and area_2.
+"""
 # function connects two switchboards
 def connect_switchboards(switchboards, area_1, area_2):
     switch_1 = switchboards.get(area_1)
@@ -69,17 +77,41 @@ def connect_switchboards(switchboards, area_1, area_2):
     if switch_1 and switch_2:
         switch_1.add_connection(switch_2)
 
+"""
+    Preconditions:
+    - `switchboards` is a dictionary of existing switchboards.
+    - `area_code` is an integer representing a new switchboard area code.
+
+    Postconditions:
+    - Adds a new Switchboard object with the specified area_code to the `switchboards` dictionary.
+"""
 # function adds a new switchboard
 def add_switchboard(switchboards, area_code):
     if area_code not in switchboards:
         switchboards[area_code] = Switchboard(area_code)
 
+"""
+    Preconditions:
+    - `switchboards` contains a Switchboard object with the specified area_code.
+    - `phone_number` is a valid phone number to be added.
+
+    Postconditions:
+    - A new PhoneNumber object is added to the Switchboard's list of phone numbers.
+"""
 # function adds a new phone number to a switchboard
 def add_phone(switchboards, area_code, phone_number):
     switchboard = switchboards.get(area_code)
     if switchboard:
         switchboard.add_phone_number(PhoneNumber(area_code, phone_number))
 
+"""
+    Preconditions:
+    - `switchboards` is a populated dictionary of Switchboard objects.
+    - `file_name` is a valid string for the output file name.
+
+    Postconditions:
+    - The current state of the network is saved to the specified file.
+"""
 # function saves the network information to a file
 def save_network(switchboards, file_name):
     with open(file_name, 'w') as file:
@@ -90,6 +122,13 @@ def save_network(switchboards, file_name):
             for phone_number in switchboard.phone_numbers:
                 file.write(f"PHONE {phone_number.area_code}-{phone_number.number}\n")
 
+"""
+    Preconditions:
+    - `file_name` is a valid string for the input file containing network data.
+
+    Postconditions:
+    - Returns a dictionary of switchboards populated from the data in the specified file.
+"""
 # function to load network information from a file
 def load_network(file_name):
     switchboards = {}
@@ -117,6 +156,14 @@ def load_network(file_name):
 
     return switchboards
 
+"""
+    Preconditions:
+    - `start_switchboard` and `end_switchboard` are valid Switchboard objects.
+    - `visited` is a set to track visited switchboards during traversal.
+
+    Postconditions:
+    - Returns True if a path exists between the start and end switchboards; otherwise, False.
+"""
 # recursive function to find a path between two switchboards
 # helper function for start_call function
 def find_path(start_switchboard, end_switchboard, visited):
@@ -133,6 +180,14 @@ def find_path(start_switchboard, end_switchboard, visited):
 
     return False
 
+"""
+    Preconditions:
+    - `switchboards` contains valid Switchboard objects for the specified area codes.
+    - `start_src_number` and `end_src_number` are valid phone numbers within their respective area codes.
+
+    Postconditions:
+    - If a path exists, connects the two phone numbers and prints a success message; otherwise, prints an error message.
+"""
 # function initiates a call between two phone numbers if a path exists between their switchboards
 def start_call(switchboards, start_area_code, start_src_number, end_area_code, end_src_number):
     start_switchboard = switchboards.get(start_area_code)
@@ -153,6 +208,14 @@ def start_call(switchboards, start_area_code, start_src_number, end_area_code, e
 
         print("No path found between the given phone numbers.")
 
+"""
+    Preconditions:
+    - `switchboards` contains a Switchboard object with the specified area code.
+    - `start_src_number` is a valid phone number in the specified switchboard.
+
+    Postconditions:
+    - Disconnects the specified phone number if it is connected.
+"""
 # function ends a call bewteen 2 phone numbers
 def end_call(switchboards, start_area_code, start_src_number):
     switchboard = switchboards.get(start_area_code)
@@ -161,6 +224,13 @@ def end_call(switchboards, start_area_code, start_src_number):
             if phone.area_code == start_area_code and phone.number == start_src_number:
                 phone.disconnect()
 
+"""
+    Preconditions:
+    - `switchboards` is a populated dictionary of Switchboard objects.
+
+    Postconditions:
+    - Prints the current state of the network, including switchboards, connections, and phone numbers.
+"""
 # function displays the network information
 def display(switchboards):
     for area_code, switchboard in switchboards.items():
